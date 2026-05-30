@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#f8f9ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>LearnAI Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f7ff;--bg2:#edf0fb;--bg3:#e2e6f8;--card:#ffffff;
+  --border:#dde2f0;--text:#0f1728;--muted:#6b7a9f;
+  --accent:#3b6ef8;--accent2:#6c3bf8;--gold:#d4920a;
+  --green:#0a8a5a;--green-bg:#eafaf3;--green-border:#b6ead3;
+  --teacher:#d45a10;--business:#1a5ed4;--health:#0a7a50;--basics:#6030c8;
+  --shadow:0 2px 16px rgba(59,110,248,0.08);
+  --shadow-card:0 1px 6px rgba(15,23,40,0.07);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;font-size:17px}
+h1,h2,h3{font-family:'Playfair Display',serif}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* SPLASH */
+#splash{background:linear-gradient(160deg,#e8edff 0%,#f5f7ff 50%,#eef2ff 100%);align-items:center;justify-content:center;text-align:center;padding:48px 28px;position:relative;overflow:hidden}
+#splash::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233b6ef8' fill-opacity='0.04'%3E%3Cpath d='M40 40m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0M0 0h10v10H0zm70 0h10v10H70zM0 70h10v10H0zm70 70h10v10H70z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.splash-logo{width:86px;height:86px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 28px;box-shadow:0 8px 32px rgba(59,110,248,0.28);animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(59,110,248,0.28)}50%{box-shadow:0 8px 48px rgba(59,110,248,0.45)}}
+.splash-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:800;color:var(--text);line-height:1.15;margin-bottom:14px;letter-spacing:-.5px}
+.splash-title span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.splash-sub{font-family:'Source Serif 4',serif;font-weight:300;color:var(--muted);font-size:16px;line-height:1.7;max-width:300px;margin:0 auto 48px;font-style:italic}
+
+.btn-primary{display:block;width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:17px 24px;border-radius:14px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer;letter-spacing:.2px;transition:transform .15s,box-shadow .15s;text-align:center;box-shadow:0 4px 16px rgba(59,110,248,0.3)}
+.btn-primary:active{transform:scale(.97);box-shadow:0 2px 8px rgba(59,110,248,0.2)}
+.btn-outline{display:block;width:100%;background:#fff;color:var(--text);border:1.5px solid var(--border);padding:15px 24px;border-radius:14px;font-family:'Inter',sans-serif;font-size:16px;font-weight:500;cursor:pointer;margin-top:12px;transition:background .15s,transform .15s;box-shadow:var(--shadow-card)}
+.btn-outline:active{background:var(--bg2);transform:scale(.97)}
+.btn-ghost{background:transparent;color:var(--muted);border:none;font-size:15px;cursor:pointer;padding:8px;font-family:'Inter',sans-serif;display:block;width:100%;text-align:center;margin-top:16px}
+
+/* NAVBAR */
+.navbar{background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(59,110,248,0.06)}
+.navbar-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.premium-badge{background:linear-gradient(135deg,var(--gold),#b87a00);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;font-family:'Inter',sans-serif;letter-spacing:.5px}
+.free-badge{background:var(--bg3);color:var(--muted);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;font-family:'Inter',sans-serif;border:1px solid var(--border)}
+
+/* HOME */
+#home{padding-bottom:40px}
+.home-hero{padding:28px 20px 22px;background:linear-gradient(160deg,#e8edff 0%,#f5f7ff 100%);border-bottom:1px solid var(--border)}
+.home-greeting{font-family:'Inter',sans-serif;color:var(--accent);font-size:12px;margin-bottom:6px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+.home-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;line-height:1.25;margin-bottom:8px;letter-spacing:-.3px;color:var(--text)}
+.home-title span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.home-sub{font-family:'Source Serif 4',serif;font-weight:300;font-style:italic;color:var(--muted);font-size:16px;line-height:1.6}
+.section-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:22px 20px 10px}
+.paths-grid{display:flex;flex-direction:column;gap:14px;padding:0 20px}
+
+/* PATH CARDS */
+.path-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;box-shadow:var(--shadow-card)}
+.path-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius) var(--radius) 0 0}
+.path-card.teacher::before{background:var(--teacher)}
+.path-card.business::before{background:var(--business)}
+.path-card.health::before{background:var(--health)}
+.path-card.basics::before{background:var(--basics)}
+.path-card:active{transform:scale(.98);box-shadow:var(--shadow)}
+.path-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.path-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.teacher .path-icon{background:#f9731620}
+.business .path-icon{background:#3b6ef820}
+.health .path-icon{background:#0a8a5a20}
+.basics .path-icon{background:#6030c820}
+.path-lessons-count{font-size:13px;color:var(--muted);background:var(--bg3);padding:4px 10px;border-radius:20px;border:1px solid var(--border);font-family:'Inter',sans-serif}
+.path-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.path-desc{font-family:'Inter',sans-serif;font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.path-progress{background:var(--bg3);border-radius:4px;height:5px;overflow:hidden;margin-bottom:8px}
+.path-progress-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.teacher .path-progress-fill{background:var(--teacher)}
+.business .path-progress-fill{background:var(--business)}
+.health .path-progress-fill{background:var(--health)}
+.basics .path-progress-fill{background:var(--basics)}
+.path-progress-label{font-size:12px;color:var(--muted);font-family:'Inter',sans-serif}
+
+/* BANNERS */
+.upgrade-banner{margin:20px 20px 0;background:linear-gradient(135deg,#eef1ff,#f0ebff);border:1.5px solid #c5cef8;border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s;box-shadow:var(--shadow-card)}
+.upgrade-banner:active{transform:scale(.98)}
+.upgrade-icon{font-size:26px;flex-shrink:0}
+.upgrade-text h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.upgrade-text p{font-size:13px;color:var(--muted);line-height:1.4;font-family:'Inter',sans-serif}
+.upgrade-arrow{margin-left:auto;color:var(--accent);font-size:22px;flex-shrink:0}
+.tutor-banner-wrap{margin:12px 20px 0}
+.tutor-banner{background:linear-gradient(135deg,#e8faf3,#d4f5e6);border:1.5px solid var(--green-border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s;text-decoration:none;box-shadow:var(--shadow-card)}
+.tutor-banner:active{transform:scale(.98)}
+.tutor-icon{font-size:24px;flex-shrink:0}
+.tutor-text h3{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:2px;color:#064e2b}
+.tutor-text p{font-size:12px;color:var(--green);line-height:1.4;font-family:'Inter',sans-serif}
+
+/* PROMO BANNER */
+.promo-banner{margin:12px 20px 0;background:linear-gradient(135deg,#fff8e6,#fff3d0);border:1.5px solid #f5d88a;border-radius:var(--radius);padding:14px 18px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--shadow-card)}
+.promo-banner .promo-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.promo-banner p{font-size:13px;color:#7a4a00;line-height:1.5;font-family:'Inter',sans-serif}
+.promo-banner strong{color:#5a3200}
+
+/* PATH DETAIL */
+#path-detail{padding-bottom:40px}
+.back-bar{display:flex;align-items:center;gap:10px;padding:14px 20px;cursor:pointer;color:var(--muted);font-size:14px;border-bottom:1px solid var(--border);font-family:'Inter',sans-serif;background:var(--card)}
+.back-bar:active{opacity:.7}
+.path-hero{padding:22px 20px;background:linear-gradient(160deg,#e8edff,#f5f7ff);border-bottom:1px solid var(--border)}
+.path-hero-icon{font-size:38px;margin-bottom:10px}
+.path-hero-title{font-family:'Playfair Display',serif;font-size:23px;font-weight:800;margin-bottom:8px;color:var(--text)}
+.path-hero-desc{color:var(--muted);font-size:15px;line-height:1.65;font-family:'Inter',sans-serif}
+.lessons-list{padding:16px 20px 0;display:flex;flex-direction:column;gap:10px}
+.lesson-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow-card)}
+.lesson-card:active{transform:scale(.98);box-shadow:var(--shadow)}
+.lesson-card.locked{opacity:.65}
+.lesson-card.completed{border-color:var(--green-border);background:var(--green-bg)}
+.lesson-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;flex-shrink:0}
+.lesson-num.free-num{background:var(--bg3);color:var(--text)}
+.lesson-num.locked-num{background:var(--bg3);color:var(--muted)}
+.lesson-num.done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.lesson-info{flex:1}
+.lesson-title{font-size:15px;font-weight:600;margin-bottom:3px;font-family:'Inter',sans-serif;color:var(--text)}
+.lesson-meta{font-size:13px;color:var(--muted);font-family:'Inter',sans-serif}
+
+/* LESSON READER */
+#lesson-reader{padding-bottom:80px;background:var(--bg)}
+.lesson-header{padding:18px 20px 20px;border-bottom:1px solid var(--border);background:var(--card)}
+.lesson-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.lesson-tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:20px;font-family:'Inter',sans-serif}
+.lesson-tag.teacher{background:#f9731618;color:var(--teacher)}
+.lesson-tag.business{background:#3b6ef818;color:var(--business)}
+.lesson-tag.health{background:#0a8a5a18;color:var(--health)}
+.lesson-tag.basics{background:#6030c818;color:var(--basics)}
+.lesson-title-big{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;line-height:1.35;color:var(--text)}
+.lesson-reading-time{font-size:14px;color:var(--muted);font-family:'Inter',sans-serif}
+.lesson-body{padding:24px 20px;line-height:1.9;font-size:16px;color:#2a3550;font-family:'Inter',sans-serif}
+.lesson-body h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin:26px 0 12px}
+.lesson-body p{margin-bottom:16px}
+.lesson-body .highlight-box{background:linear-gradient(135deg,#eef1ff,#f0ebff);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:16px;margin:20px 0;font-size:15px;line-height:1.75;color:#2a3a70;font-style:italic}
+.lesson-body .demo-box{background:#f5f3ff;border:1.5px solid #c8baf8;border-radius:12px;padding:18px;margin:20px 0;font-size:15px;line-height:1.75;color:#2a1a5a;position:relative}
+.lesson-body .demo-box strong{color:var(--basics)}
+.lesson-image{width:100%;border-radius:12px;margin:20px 0;background:var(--bg3);min-height:160px;display:flex;align-items:center;justify-content:center;font-size:48px;border:2px dashed var(--border)}
+
+/* PROMPT BLOCK */
+.prompt-wrap{position:relative;margin:14px 0}
+.prompt-block{background:#f0f4ff;padding:14px 14px 14px 14px;padding-right:52px;border-radius:10px;font-size:14px;color:#1a3080;border:1.5px solid #c5cef8;font-style:italic;line-height:1.65}
+.copy-btn{position:absolute;top:8px;right:8px;background:#fff;border:1.5px solid var(--border);border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.copy-btn:active{background:var(--bg3)}
+.copy-btn.copied{color:var(--green);border-color:var(--green-border)}
+
+.lesson-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:12px;box-shadow:0 -2px 12px rgba(59,110,248,0.07)}
+.btn-lesson-nav{flex:1;padding:14px;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:transform .15s}
+.btn-lesson-nav:active{transform:scale(.97)}
+.btn-lesson-nav.prev{background:var(--bg3);color:var(--muted);border:1.5px solid var(--border)}
+.btn-lesson-nav.next{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 14px rgba(59,110,248,0.3)}
+.btn-lesson-nav.complete{background:linear-gradient(135deg,#0a8a5a,#065f40);color:#fff;box-shadow:0 4px 14px rgba(10,138,90,0.28)}
+
+/* UPGRADE */
+#upgrade{background:linear-gradient(160deg,#eef1ff 0%,#f5f7ff 100%)}
+.upgrade-content{padding:36px 24px;flex:1;display:flex;flex-direction:column}
+.upgrade-header{text-align:center;margin-bottom:28px}
+.upgrade-crown{font-size:48px;margin-bottom:12px}
+.upgrade-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;margin-bottom:10px;background:linear-gradient(135deg,var(--gold),#8a5c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.upgrade-subtitle{color:var(--muted);font-size:15px;line-height:1.6;font-family:'Source Serif 4',serif;font-style:italic}
+.price-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:20px;box-shadow:var(--shadow)}
+.price-label{color:var(--muted);font-size:14px;margin-bottom:8px;font-family:'Inter',sans-serif}
+.price-amount{font-family:'Playfair Display',serif;font-size:50px;font-weight:800;color:var(--gold);line-height:1}
+.price-currency{font-size:22px;vertical-align:super;margin-right:2px}
+.price-note{color:var(--muted);font-size:13px;margin-top:6px;font-family:'Inter',sans-serif;font-style:italic}
+.promo-price-note{background:#fff8e6;border:1.5px solid #f5d88a;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:14px;color:#7a4a00;font-family:'Inter',sans-serif;line-height:1.55}
+.promo-price-note strong{color:#5a2800}
+.features-list{display:flex;flex-direction:column;gap:13px;margin-bottom:22px}
+.feature-item{display:flex;align-items:center;gap:12px;font-size:15px;font-family:'Inter',sans-serif;color:var(--text)}
+.feature-check{width:24px;height:24px;background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0}
+.tutor-upgrade-section{background:linear-gradient(135deg,#e8faf3,#d4f5e6);border:1.5px solid var(--green-border);border-radius:var(--radius);padding:20px;margin-bottom:22px;text-align:center}
+.tutor-upgrade-section h4{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:6px;color:#064e2b}
+.tutor-upgrade-section p{font-size:13px;color:#0a6040;line-height:1.5;margin-bottom:14px;font-family:'Inter',sans-serif}
+.locked-tutor-note{display:flex;align-items:center;gap:8px;background:#fff8e6;border:1.5px solid #f5d88a;border-radius:10px;padding:12px 14px;font-size:13px;color:#7a4a00;font-family:'Inter',sans-serif}
+
+/* ACTIVATE */
+#activate{padding:0;background:var(--bg)}
+.activate-content{padding:28px 24px;flex:1}
+.activate-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;margin-bottom:8px;color:var(--text)}
+.activate-sub{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:28px;font-family:'Inter',sans-serif}
+.steps-list{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+.step-item{display:flex;gap:14px;align-items:flex-start}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;box-shadow:0 3px 10px rgba(59,110,248,0.28)}
+.step-text h4{font-size:15px;font-weight:600;margin-bottom:3px;font-family:'Inter',sans-serif;color:var(--text)}
+.step-text p{font-size:14px;color:var(--muted);line-height:1.55;font-family:'Inter',sans-serif}
+.step-text a{color:var(--accent);text-decoration:none;font-weight:500}
+.payment-box{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin:6px 0 0;box-shadow:var(--shadow-card)}
+.payment-box p{font-size:14px;line-height:1.8;color:var(--text);font-family:'Inter',sans-serif}
+.payment-box strong{color:var(--accent)}
+.input-group{margin-bottom:16px}
+.input-label{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:8px;display:block;font-family:'Inter',sans-serif}
+.input-field{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:15px 16px;color:var(--text);font-size:17px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;letter-spacing:3px;box-shadow:var(--shadow-card)}
+.input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,110,248,0.1)}
+.input-field::placeholder{letter-spacing:2px;color:#bbc4dc;font-size:15px}
+.device-id-box{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow-card)}
+.device-id-text{font-size:14px;color:var(--muted);font-family:'Inter',sans-serif;flex:1}
+.device-id-text span{color:var(--accent);font-weight:700;font-size:18px;letter-spacing:2px;display:block;margin-top:2px}
+.copy-id-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:background .15s}
+.copy-id-btn:active{background:var(--bg2)}
+.wa-prefill-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#dcfce7;color:#14532d;border:2px solid #86efac;padding:15px 20px;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:16px;box-shadow:0 2px 8px rgba(22,163,74,0.15);transition:transform .15s;letter-spacing:.2px}
+.wa-prefill-btn:active{transform:scale(.97)}
+.error-msg{color:#c0392b;font-size:14px;margin-top:8px;display:none;font-family:'Inter',sans-serif;background:#fdf3f2;border:1px solid #f5c0bb;border-radius:8px;padding:10px 12px}
+.success-msg{background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:12px;padding:16px;text-align:center;display:none;font-family:'Inter',sans-serif;color:var(--green)}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-top:1.5px solid var(--border);display:flex;padding:8px 0 20px;z-index:100;box-shadow:0 -2px 12px rgba(59,110,248,0.06)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;cursor:pointer;color:var(--muted);font-size:11px;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.5px;transition:color .15s}
+.nav-item.active{color:var(--accent)}
+.nav-icon{font-size:22px}
+
+/* LOCK GATE */
+.lock-gate{margin:16px 20px 4px;background:linear-gradient(135deg,#f0ebff,#eef1ff);border:1.5px solid #c8baf8;border-radius:var(--radius);padding:22px;text-align:center;box-shadow:var(--shadow-card)}
+.lock-gate h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.lock-gate p{color:var(--muted);font-size:15px;margin-bottom:18px;line-height:1.55;font-family:'Inter',sans-serif}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.screen.active>*{animation:fadeIn .25s ease forwards}
+.spacer-nav{height:80px}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" class="screen active">
+  <div>
+    <div class="splash-logo">🤖</div>
+    <h1 class="splash-title">Learn<span>AI</span> Pro</h1>
+    <p class="splash-sub">Master artificial intelligence in your profession. Practical skills, real results.</p>
+    <button class="btn-primary" onclick="goHome()">Get Started — It's Free</button>
+    <button class="btn-outline" onclick="showActivate()">I Have an Activation Key</button>
+    <button class="btn-ghost" onclick="goHome()">Browse Free Lessons</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div class="navbar">
+    <span class="navbar-logo">LearnAI Pro</span>
+    <span id="home-badge" class="free-badge">FREE</span>
+  </div>
+  <div class="home-hero">
+    <p class="home-greeting">Your Learning Dashboard</p>
+    <h2 class="home-title">Learn AI for <span>your profession</span></h2>
+    <p class="home-sub">Choose a learning path and start building real, practical AI skills today.</p>
+  </div>
+  <p class="section-label">Learning Paths</p>
+  <div class="paths-grid">
+    <div class="path-card basics" onclick="openPath('basics')">
+      <div class="path-card-top"><div class="path-icon">🧠</div><span class="path-lessons-count">10 modules</span></div>
+      <div class="path-title">AI Literacy Basics</div>
+      <div class="path-desc">For everyday people — understand AI, use it safely, and apply it in real life. No technical background needed.</div>
+      <div class="path-progress"><div class="path-progress-fill" id="basics-prog" style="width:0%"></div></div>
+      <div class="path-progress-label" id="basics-prog-label">0% complete</div>
+    </div>
+    <div class="path-card teacher" onclick="openPath('teacher')">
+      <div class="path-card-top"><div class="path-icon">👩‍🏫</div><span class="path-lessons-count">8 lessons</span></div>
+      <div class="path-title">Teachers & Educators</div>
+      <div class="path-desc">Use AI to plan lessons, grade faster, create resources, and personalise student learning.</div>
+      <div class="path-progress"><div class="path-progress-fill" id="teacher-prog" style="width:0%"></div></div>
+      <div class="path-progress-label" id="teacher-prog-label">0% complete</div>
+    </div>
+    <div class="path-card business" onclick="openPath('business')">
+      <div class="path-card-top"><div class="path-icon">💼</div><span class="path-lessons-count">8 lessons</span></div>
+      <div class="path-title">Business Owners & Entrepreneurs</div>
+      <div class="path-desc">Automate operations, write proposals, analyse data, and grow your business with AI.</div>
+      <div class="path-progress"><div class="path-progress-fill" id="business-prog" style="width:0%"></div></div>
+      <div class="path-progress-label" id="business-prog-label">0% complete</div>
+    </div>
+    <div class="path-card health" onclick="openPath('health')">
+      <div class="path-card-top"><div class="path-icon">🩺</div><span class="path-lessons-count">8 lessons</span></div>
+      <div class="path-title">Health Workers</div>
+      <div class="path-desc">Doctors, nurses & health professionals — use AI for research, documentation, and patient care.</div>
+      <div class="path-progress"><div class="path-progress-fill" id="health-prog" style="width:0%"></div></div>
+      <div class="path-progress-label" id="health-prog-label">0% complete</div>
+    </div>
+  </div>
+  <div class="upgrade-banner" id="upgrade-banner" onclick="showUpgrade()">
+    <div class="upgrade-icon">⚡</div>
+    <div class="upgrade-text">
+      <h3>Unlock All Lessons</h3>
+      <p>Full access to every path — promotional offer for first 1,000 users only.</p>
+    </div>
+    <div class="upgrade-arrow">›</div>
+  </div>
+  <div class="tutor-banner-wrap" id="tutor-home-banner" style="display:none">
+    <a class="tutor-banner" id="tutor-wa-link" href="#" target="_blank">
+      <div class="tutor-icon">💬</div>
+      <div class="tutor-text">
+        <h3>Chat with Your AI Tutor</h3>
+        <p>Premium — get personalised guidance on WhatsApp.</p>
+      </div>
+      <div class="upgrade-arrow" style="color:var(--green)">›</div>
+    </a>
+  </div>
+  <div class="spacer-nav"></div>
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="goHome()"><span class="nav-icon">🏠</span>Home</div>
+    <div class="nav-item" onclick="showUpgrade()"><span class="nav-icon">⚡</span>Upgrade</div>
+    <div class="nav-item" onclick="showActivate()"><span class="nav-icon">🔑</span>Activate</div>
+  </div>
+</div>
+
+<!-- PATH DETAIL -->
+<div id="path-detail" class="screen">
+  <div class="navbar"><span class="navbar-logo">LearnAI Pro</span><span id="detail-badge" class="free-badge">FREE</span></div>
+  <div class="back-bar" onclick="goHome()"><span>←</span>&nbsp; Back to Paths</div>
+  <div class="path-hero">
+    <div class="path-hero-icon" id="path-hero-icon">🧠</div>
+    <h2 class="path-hero-title" id="path-hero-title">AI Literacy Basics</h2>
+    <p class="path-hero-desc" id="path-hero-desc">For everyday people.</p>
+  </div>
+  <p class="section-label">Modules</p>
+  <div class="lessons-list" id="lessons-list"></div>
+  <div class="spacer-nav"></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goHome()"><span class="nav-icon">🏠</span>Home</div>
+    <div class="nav-item" onclick="showUpgrade()"><span class="nav-icon">⚡</span>Upgrade</div>
+    <div class="nav-item" onclick="showActivate()"><span class="nav-icon">🔑</span>Activate</div>
+  </div>
+</div>
+
+<!-- LESSON READER -->
+<div id="lesson-reader" class="screen">
+  <div class="navbar"><span class="navbar-logo">LearnAI Pro</span><span id="lesson-badge" class="free-badge">FREE</span></div>
+  <div class="back-bar" id="lesson-back-bar"><span>←</span>&nbsp; Back</div>
+  <div class="lesson-header">
+    <div class="lesson-header-top">
+      <span class="lesson-tag basics" id="lesson-tag-label">MODULE</span>
+      <span class="lesson-reading-time" id="lesson-read-time">5 min</span>
+    </div>
+    <h2 class="lesson-title-big" id="lesson-title-display">Lesson Title</h2>
+  </div>
+  <div class="lesson-body" id="lesson-body-content"></div>
+  <div class="lesson-nav">
+    <button class="btn-lesson-nav prev" id="btn-prev" onclick="prevLesson()">← Prev</button>
+    <button class="btn-lesson-nav next" id="btn-next" onclick="nextLessonOrComplete()">Next →</button>
+  </div>
+</div>
+
+<!-- UPGRADE -->
+<div id="upgrade" class="screen">
+  <div class="navbar"><span class="navbar-logo">LearnAI Pro</span><span class="premium-badge">PRO</span></div>
+  <div class="back-bar" onclick="goHome()"><span>←</span>&nbsp; Back</div>
+  <div class="upgrade-content">
+    <div class="upgrade-header">
+      <div class="upgrade-crown">👑</div>
+      <h2 class="upgrade-title">Go Premium</h2>
+      <p class="upgrade-subtitle">Unlock every lesson and module, plus direct access to a live AI Tutor on WhatsApp.</p>
+    </div>
+    <div class="price-card">
+      <p class="price-label">One-Time Lifetime Access</p>
+      <div class="price-amount"><span class="price-currency">₦</span>3,500</div>
+      <p class="price-note">One payment. Lifetime access. No renewals.</p>
+      <div class="promo-price-note">🔥 <strong>Promotional offer for the first 1,000 users only.</strong> Price increases to <strong>₦50,000</strong> after that. Lock in your lifetime access today.</div>
+    </div>
+    <div class="features-list">
+      <div class="feature-item"><div class="feature-check">✓</div>All 34 lessons & modules unlocked</div>
+      <div class="feature-item"><div class="feature-check">✓</div>AI Literacy Basics — all 10 modules including Workshop & Final Project</div>
+      <div class="feature-item"><div class="feature-check">✓</div>Teacher, Business & Health paths — fully unlocked</div>
+      <div class="feature-item"><div class="feature-check">✓</div>Progress tracking across all paths</div>
+      <div class="feature-item"><div class="feature-check">✓</div>Works offline on your phone (PWA)</div>
+      <div class="feature-item"><div class="feature-check">✓</div>Free updates as new content is added</div>
+    </div>
+    <div class="tutor-upgrade-section">
+      <h4>💬 Live AI Tutor on WhatsApp</h4>
+      <p>Premium members get direct one-on-one access to ask questions and receive personalised AI guidance.</p>
+      <div id="upgrade-tutor-locked" class="locked-tutor-note">🔒 &nbsp;Activate your premium key first to unlock WhatsApp Tutor access.</div>
+      <a id="upgrade-tutor-btn" href="#" target="_blank" style="display:none;background:linear-gradient(135deg,#16a34a,#059669);color:#fff;text-decoration:none;padding:14px;border-radius:12px;font-weight:600;font-size:14px;text-align:center;font-family:'Inter',sans-serif;box-shadow:0 4px 14px rgba(22,163,74,0.28);display:none;align-items:center;justify-content:center;gap:8px">
+        💬 Chat with AI Tutor on WhatsApp
+      </a>
+    </div>
+    <button class="btn-primary" onclick="showActivate()">Pay & Activate Now →</button>
+    <button class="btn-ghost" onclick="goHome()">Maybe Later</button>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goHome()"><span class="nav-icon">🏠</span>Home</div>
+    <div class="nav-item active" onclick="showUpgrade()"><span class="nav-icon">⚡</span>Upgrade</div>
+    <div class="nav-item" onclick="showActivate()"><span class="nav-icon">🔑</span>Activate</div>
+  </div>
+</div>
+
+<!-- ACTIVATE -->
+<div id="activate" class="screen">
+  <div class="navbar"><span class="navbar-logo">LearnAI Pro</span><span id="activate-badge" class="free-badge">FREE</span></div>
+  <div class="back-bar" onclick="goHome()"><span>←</span>&nbsp; Back</div>
+  <div class="activate-content">
+    <h2 class="activate-title">Activate Premium</h2>
+    <p class="activate-sub">Follow these three steps to unlock full access.</p>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h4>Make Payment</h4>
+          <div class="payment-box">
+            <p>Transfer <strong>₦3,500</strong> to:<br>
+            <strong>KUDA Microfinance Bank</strong><br>
+            Account No: <strong>3002675573</strong><br>
+            Account Name: <strong>CHUKWUDI ONYEKWE</strong></p>
+          </div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h4>Send Proof + Your Device ID via WhatsApp</h4>
+          <p style="margin-bottom:10px">Copy your Device ID below, then tap the button to send it with your payment screenshot in one step.</p>
+          <p class="input-label" style="margin-bottom:6px">Your Device ID</p>
+          <div class="device-id-box">
+            <div class="device-id-text">Device ID:<span id="device-id-display">----</span></div>
+            <button class="copy-id-btn" onclick="copyDeviceId()">📋 Copy</button>
+          </div>
+          <a class="wa-prefill-btn" id="wa-prefill-link" href="#" target="_blank">
+            💬 Send Device ID to Admin on WhatsApp
+          </a>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h4>Enter Your Activation Key</h4>
+          <p>You'll receive your unique key within 30 minutes of payment confirmation.</p>
+        </div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label" for="key-input">Activation Key</label>
+      <input class="input-field" id="key-input" type="text" placeholder="XXX-XXXX-XXXX-XXXXX" maxlength="19" oninput="handleKeyInput(this)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="error-msg" id="key-error">❌ Invalid key. Please check and try again.</div>
+    </div>
+    <div class="success-msg" id="key-success">
+      🎉 <strong>Premium Activated!</strong><br>
+      <span style="font-size:13px;margin-top:4px;display:block">All lessons are now unlocked. Enjoy your journey!</span>
+    </div>
+    <button class="btn-primary" id="activate-btn" onclick="activateKey()">Activate Key</button>
+    <button class="btn-ghost" onclick="goHome()">Back to Home</button>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goHome()"><span class="nav-icon">🏠</span>Home</div>
+    <div class="nav-item" onclick="showUpgrade()"><span class="nav-icon">⚡</span>Upgrade</div>
+    <div class="nav-item active" onclick="showActivate()"><span class="nav-icon">🔑</span>Activate</div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONTENT DATA
+// ─────────────────────────────────────────────
+const PATHS = {
+  basics:{icon:'🧠',title:'AI Literacy Basics',desc:'For everyday people — understand what AI is, how it works, and how to use it safely and productively in daily life.',color:'basics',tag:'BASICS',freeCount:2,lessons:[
+    {title:'Module 1: Introduction to Artificial Intelligence',time:'7 min',free:true,content:`<h3>What Is Artificial Intelligence?</h3><p>Artificial Intelligence (AI) is the ability of a computer system to perform tasks that normally require human intelligence — understanding language, recognising faces, making decisions, and learning from experience.</p><div class="highlight-box">A simple definition: AI is software trained on massive amounts of data so it can respond, predict, and assist in ways that feel almost human.</div><h3>AI vs Automation vs Robotics</h3><p><strong>Automation</strong> follows fixed rules — a calculator always adds the same way. <strong>Robotics</strong> involves physical machines. <strong>AI</strong> is different: it learns, adapts, and improves over time without being explicitly programmed for every scenario.</p><div class="lesson-image">🤖</div><h3>Types of AI</h3><p><strong>Narrow AI</strong> — Designed for one task. Face recognition, Google Maps, spam filters. This is what exists today.</p><p><strong>General AI</strong> — A hypothetical AI that can do anything a human can. This does not yet exist.</p><p><strong>Generative AI</strong> — AI that creates new content: text, images, audio, video. ChatGPT, Claude, Midjourney. This is the most transformative development of our time.</p><h3>Common Myths</h3><p>❌ "AI thinks like a human" — It processes patterns, not thoughts.<br>❌ "AI is always right" — AI makes errors regularly. Always verify.<br>❌ "AI will replace all jobs" — AI replaces tasks, not entire professions.</p><div class="demo-box"><strong>🎯 Demonstration:</strong> Open ChatGPT or Claude on your phone browser. Type the prompt below and read the response — notice how AI explains it at your language level. That is AI at work.<div class="prompt-wrap"><div class="prompt-block" id="p-b1-1">What is AI in 3 simple sentences?</div><button class="copy-btn" onclick="copyPrompt('p-b1-1',this)">Copy</button></div></div>`},
+    {title:'Module 2: AI in Everyday Life',time:'6 min',free:true,content:`<h3>AI Is Already Around You</h3><p>You have been using AI dozens of times today without realising it. Every time your phone suggests the next word, YouTube recommends a video, or Google Maps reroutes you — that is AI.</p><div class="highlight-box">You don't need to download a special app to use AI. It is already embedded in the tools you use daily.</div><h3>Where AI Shows Up Daily</h3><p><strong>Smartphones</strong> — Autocorrect, face unlock, voice assistants, portrait mode camera.</p><p><strong>Social Media</strong> — The algorithm deciding what you see on Facebook, Instagram, and TikTok is entirely AI-driven.</p><p><strong>Banking</strong> — Fraud detection, chatbots, credit scoring. Opay and Kuda both use AI fraud detection.</p><p><strong>Healthcare</strong> — Diagnostic imaging software, scheduling systems, symptom checkers.</p><p><strong>Entertainment</strong> — Netflix knowing what to watch next. Spotify's Discover Weekly playlist.</p><div class="lesson-image">📱</div><h3>AI in Nigeria Specifically</h3><p>From MTN's customer service chatbots to Google Translate supporting Yoruba, Igbo, and Hausa — AI is deeply embedded in Nigerian digital life already.</p><div class="demo-box"><strong>🎯 Practical Activity:</strong> Take out your phone. List 10 apps or services you used today. Next to each, write YES or NO — does it use AI? Examples: WhatsApp (Yes), Google Maps (Yes), a basic torch app (No). Compare your list with someone nearby.</div>`},
+    {title:'Module 3: Understanding Generative AI',time:'7 min',free:false,content:`<h3>What Is Generative AI?</h3><p>Generative AI creates new content — it doesn't just answer questions, it generates text, images, audio, and video that didn't exist before.</p><div class="highlight-box">Traditional AI says "this email is spam." Generative AI says "here is a new email you can send." One analyses. The other creates.</div><h3>How ChatGPT and Claude Work (Simply)</h3><p>These tools were trained on billions of pages of text from the internet, books, and articles. They learned patterns in language. When you ask a question, they predict the most useful response based on all that learning.</p><h3>What Generative AI Can Do</h3><p>✅ Write emails, reports, letters, essays<br>✅ Summarise long documents<br>✅ Generate images from text descriptions<br>✅ Translate languages<br>✅ Answer questions and explain concepts</p><h3>What It Cannot Do Well</h3><p>❌ Guarantee factual accuracy — it can "hallucinate"<br>❌ Replace human judgement and genuine creativity</p><div class="demo-box"><strong>🎯 Demonstration:</strong> Open Claude.ai or ChatGPT. Try these prompts one after the other:<div class="prompt-wrap"><div class="prompt-block" id="p-b3-1">Summarise the parable of the talents in 5 bullet points.</div><button class="copy-btn" onclick="copyPrompt('p-b3-1',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-b3-2">Now turn that summary into a short inspirational speech.</div><button class="copy-btn" onclick="copyPrompt('p-b3-2',this)">Copy</button></div>Notice how AI reshapes one idea multiple ways in seconds.</div>`},
+    {title:'Module 4: Prompting — Communicating with AI',time:'7 min',free:false,content:`<h3>What Is a Prompt?</h3><p>A prompt is the instruction you give to an AI. The quality of your prompt determines the quality of the response. This is the single most important skill in using AI effectively.</p><div class="highlight-box">Bad input = bad output. A great prompt = a great result. Learning to prompt well is the difference between AI that frustrates you and AI that transforms your productivity.</div><h3>Weak vs Strong Prompts</h3><p><strong>Weak:</strong> "Write something about business."<br><strong>Strong:</strong> "You are a business consultant. Write a 3-paragraph introduction for a proposal to supply stationery to a Lagos primary school. Tone: professional and friendly."</p><div class="demo-box"><strong>🎯 Practice Activities — Try Each:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-b4-1">Write a professional email declining a meeting, keeping it polite and brief.</div><button class="copy-btn" onclick="copyPrompt('p-b4-1',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-b4-2">Give me 5 creative lesson ideas for teaching fractions to JSS1 students.</div><button class="copy-btn" onclick="copyPrompt('p-b4-2',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-b4-3">Write 3 Instagram captions for a Nigerian food business selling jollof rice.</div><button class="copy-btn" onclick="copyPrompt('p-b4-3',this)">Copy</button></div></div>`},
+    {title:'Module 5: Benefits and Opportunities of AI',time:'6 min',free:false,content:`<h3>AI as a Productivity Multiplier</h3><p>The most immediate benefit is time savings. Writing a proposal, preparing a presentation, researching a topic — AI compresses timelines dramatically.</p><div class="highlight-box">AI levels the playing field. A one-person business can now produce the output quality that once required a whole team.</div><h3>Opportunities AI Creates</h3><p><strong>Students</strong> — Study guides, concept explanations, practice questions, essay feedback — free and available 24/7.</p><p><strong>Entrepreneurs</strong> — Business plans, customer service automation, market research, social media content.</p><p><strong>Content Creators</strong> — Script writing, caption generation, blog post drafting.</p><p><strong>Job Seekers</strong> — CV writing, cover letters, interview preparation, LinkedIn optimisation.</p><div class="demo-box"><strong>💬 Discussion Activity:</strong> Name one task in your daily work or studies that takes more than 30 minutes. Try this prompt:<div class="prompt-wrap"><div class="prompt-block" id="p-b5-1">I am a [your role]. I spend a lot of time [your task]. Give me 3 specific ways AI can help me do this faster.</div><button class="copy-btn" onclick="copyPrompt('p-b5-1',this)">Copy</button></div>Share your result with the group.</div>`},
+    {title:'Module 6: Risks, Ethics & Responsible AI Use',time:'7 min',free:false,content:`<h3>AI Is a Tool — And Tools Can Be Misused</h3><p>Understanding the risks is not about fear — it is about being a responsible, informed digital citizen.</p><div class="highlight-box">The person who understands both the power and the risks of AI is far more equipped than someone who knows only one side.</div><h3>Key Risks to Know</h3><p><strong>Misinformation</strong> — AI generates convincing but completely false information. Never share AI content without verifying it.</p><p><strong>Deepfakes</strong> — AI can generate fake videos and audio of real people. This is being used in scams.</p><p><strong>AI Bias</strong> — AI systems trained on biased data produce biased results.</p><p><strong>Privacy</strong> — Be careful what personal information you share with AI tools.</p><p><strong>Overdependence</strong> — AI should sharpen your thinking, not replace it.</p><div class="demo-box"><strong>🎯 Practical Exercise:</strong> Take any news headline you've seen this week. Try this prompt:<div class="prompt-wrap"><div class="prompt-block" id="p-b6-1">Help me fact-check this claim and tell me what questions I should ask before sharing it: [paste your headline here]</div><button class="copy-btn" onclick="copyPrompt('p-b6-1',this)">Copy</button></div>Notice how AI itself becomes a tool for combating misinformation when used critically.</div>`},
+    {title:'Module 7: AI for Work, School & Ministry',time:'6 min',free:false,content:`<h3>AI Across Every Profession and Calling</h3><p>Whether you are a teacher, student, pastor, entrepreneur, or civil servant — there is a practical way for you to use AI today.</p><div class="highlight-box">AI doesn't care what field you are in. It is a general-purpose tool. The question is: are you creative enough to apply it to your specific context?</div><h3>AI in Ministry & Community Leadership</h3><p>Pastors and ministry workers are using AI to draft sermon outlines, write devotionals, generate Bible study questions, translate content into local languages — all in minutes.</p><div class="demo-box"><strong>🎯 Practical Exercises — Try Each:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-b7-1">Write a 3-point sermon outline on stewardship using Proverbs 3:9 as the anchor verse.</div><button class="copy-btn" onclick="copyPrompt('p-b7-1',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-b7-2">Draft a formal letter requesting a budget increase for our school library, addressed to the PTA chairman.</div><button class="copy-btn" onclick="copyPrompt('p-b7-2',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-b7-3">Create a 5-question quiz on photosynthesis for SS2 biology students.</div><button class="copy-btn" onclick="copyPrompt('p-b7-3',this)">Copy</button></div></div>`},
+    {title:'Module 8: Human Skills That Still Matter',time:'5 min',free:false,content:`<h3>What AI Cannot Replicate</h3><p>In all the excitement about AI, it is easy to feel anxious — as if human ability is becoming obsolete. The truth is more hopeful.</p><div class="highlight-box">"A hammer didn't replace carpenters — it made them more productive. AI will not replace you. Someone who uses AI well, might."</div><h3>The Skills That Remain Distinctly Human</h3><p><strong>Critical Thinking</strong> — AI generates content. Humans must evaluate whether it is correct, appropriate, and ethically right.</p><p><strong>Emotional Intelligence</strong> — Empathy, pastoral care, motivation, conflict resolution — these require a human heart.</p><p><strong>Creativity</strong> — AI remixes existing ideas. Original vision and genuine innovation remain human territory.</p><p><strong>Leadership & Accountability</strong> — AI can advise, but it cannot be held accountable.</p><p><strong>Relationships</strong> — Trust, mentorship, community, love — built through human presence, not computation.</p><div class="demo-box"><strong>💬 Reflection Discussion:</strong> Try this prompt in your journal or share with a partner:<div class="prompt-wrap"><div class="prompt-block" id="p-b8-1">What are the top 5 human skills that AI cannot replace, and how can I develop them further in an AI-assisted world?</div><button class="copy-btn" onclick="copyPrompt('p-b8-1',this)">Copy</button></div>Share one answer with the group.</div>`},
+    {title:'Module 9: Hands-On AI Tools Workshop',time:'10 min',free:false,locked:true,content:`<h3>Getting Your Hands on the Tools</h3><p>Theory without practice is incomplete. This workshop walks you through real AI tools you can use today — most of them free.</p><div class="highlight-box">The goal is not to memorise tools. The goal is to build confidence. Once you are comfortable with one AI tool, every other one becomes easier.</div><h3>Tools Covered</h3><p><strong>ChatGPT (chat.openai.com)</strong> — Free tier available. Works in any phone browser.</p><p><strong>Claude (claude.ai)</strong> — Excellent for long-form writing and analysis. Strong free tier.</p><p><strong>Microsoft Copilot</strong> — Integrated into Bing and Edge browser. Free.</p><p><strong>Gamma.app</strong> — Turn an idea into a full presentation in minutes.</p><p><strong>Canva AI</strong> — Design posters, flyers, and graphics with AI assistance.</p><h3>Workshop Activities</h3><p>Complete each exercise and save your results:</p><div class="demo-box"><strong>Activity 1 — Summarise a Document:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-b9-1">Summarise the following text in 5 clear bullet points: [paste any article or document here]</div><button class="copy-btn" onclick="copyPrompt('p-b9-1',this)">Copy</button></div><strong>Activity 2 — Create a Study Guide:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-b9-2">Create a one-page study guide for [any topic you are learning]. Include key terms, a summary, and 5 practice questions.</div><button class="copy-btn" onclick="copyPrompt('p-b9-2',this)">Copy</button></div><strong>Activity 3 — Write a Professional Email:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-b9-3">Write a formal email to [recipient] requesting [what you need]. Tone: professional but friendly. Sign off as [your name].</div><button class="copy-btn" onclick="copyPrompt('p-b9-3',this)">Copy</button></div><br>For Activity 4 (flyer) and Activity 5 (slides), go to Canva.com and Gamma.app respectively. Both are free.<br><br>📩 Share your completed work with your AI Tutor on WhatsApp for personalised feedback!</div>`},
+    {title:'Module 10: The Future of AI & Final Project',time:'8 min',free:false,locked:true,content:`<h3>AI and Africa's Future</h3><p>Africa is not just a consumer of AI — it is increasingly a contributor. Nigerian engineers, Kenyan researchers, and South African entrepreneurs are shaping what AI looks like for 1.4 billion Africans.</p><div class="highlight-box">Africa has the youngest population in the world. AI literacy today is the foundation of a generation that will define Africa's digital future.</div><h3>What to Watch: The Near Future</h3><p><strong>AI in Nigerian Agriculture</strong> — Tools predicting crop disease, rainfall, and market prices are already being piloted.</p><p><strong>AI in Healthcare</strong> — Diagnostic tools expanding quality care to underserved communities.</p><p><strong>AI Regulation</strong> — Nigeria's NITDA is developing an AI policy framework. Understanding these regulations positions you ahead of the curve.</p><h3>Your Final Project</h3><p>Choose ONE option and submit to your AI Tutor via WhatsApp:</p><p>📊 <strong>Option A:</strong> Create an AI-assisted presentation on how AI can help your specific profession (minimum 5 slides, use Gamma.app).</p><p>📝 <strong>Option B:</strong> Write a 1-page reflective report: "How I plan to use AI in my work/ministry/studies over the next 90 days."</p><p>⚙️ <strong>Option C:</strong> Design a simple AI workflow for a task in your daily life — before AI vs. with AI.</p><div class="demo-box"><strong>🎓 Course Wrap-Up</strong><br><br>Congratulations on completing AI Literacy Basics!<br><br><em>"I will use AI as a tool to serve people better, to work more effectively, and to create more value — while maintaining my integrity, my critical thinking, and my humanity."</em><br><br>📩 Submit your final project to your AI Tutor: <strong>+2347088920908</strong></div>`}
+  ]},
+  teacher:{icon:'👩‍🏫',title:'Teachers & Educators',desc:'Use AI to plan lessons, grade faster, create resources, and personalise student learning.',color:'teacher',tag:'TEACHER',freeCount:2,lessons:[
+    {title:"What is AI? A Teacher's Introduction",time:'4 min',free:true,content:`<h3>What Is Artificial Intelligence?</h3><p>AI is software that learns from data and uses that learning to perform tasks that normally require human intelligence — like understanding language, recognising patterns, or making decisions.</p><div class="highlight-box">Think of AI as a very fast, tireless assistant that has read millions of books and articles. It doesn't think like a human — but it can produce human-like results at incredible speed.</div><h3>Key AI Tools for Educators</h3><p><strong>ChatGPT / Claude</strong> — Write, explain, summarise, and answer questions on any topic.</p><p><strong>Canva AI</strong> — Auto-generates classroom visuals, presentations, and infographics.</p><p><strong>Google Gemini</strong> — Deeply integrated into Google Workspace.</p><div class="lesson-image">📚</div><div class="demo-box"><strong>🎯 Demonstration:</strong> Try these two prompts and compare the results:<div class="prompt-wrap"><div class="prompt-block" id="p-t1-1">Explain photosynthesis to a 10-year-old in 3 simple sentences.</div><button class="copy-btn" onclick="copyPrompt('p-t1-1',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-t1-2">Explain photosynthesis to a university biology student in 3 sentences.</div><button class="copy-btn" onclick="copyPrompt('p-t1-2',this)">Copy</button></div>Notice how AI adjusts complexity — this is the personalisation power you can bring to your classroom.</div>`},
+    {title:'Writing Lesson Plans with AI in Minutes',time:'5 min',free:true,content:`<h3>The Lesson Plan Problem</h3><p>Most teachers spend 2–4 hours weekly writing lesson plans. AI can reduce this to under 15 minutes while producing plans that are structured, curriculum-aligned, and ready to customise.</p><div class="highlight-box">The key is giving AI clear instructions. This is called "prompting" — a skill you can master in one day.</div><div class="lesson-image">📝</div><div class="demo-box"><strong>🎯 Practical Work:</strong> Pick any topic you are teaching next week. Try this prompt:<div class="prompt-wrap"><div class="prompt-block" id="p-t2-1">Write a 40-minute lesson plan for JSS2 students on the water cycle. Include learning objectives, introduction, main activity, assessment, and homework. Make it interactive.</div><button class="copy-btn" onclick="copyPrompt('p-t2-1',this)">Copy</button></div>Compare it to your usual plan — what did AI include that you might have missed? What needed personalising?</div>`},
+    {title:'Creating Exam Questions & Quizzes Instantly',time:'5 min',free:false,content:`<h3>Generate Assessments in Seconds</h3><p>AI can generate objective questions, essay prompts, true/false questions, and fill-in-the-blank exercises for any topic and level.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-t3-1">Create 10 multiple-choice questions for SS1 students on the French Revolution. Include an answer key. Mix easy, medium, and hard difficulty.</div><button class="copy-btn" onclick="copyPrompt('p-t3-1',this)">Copy</button></div>Print the quiz and give it to your class. Time how long it took compared to writing manually.</div>`},
+    {title:'Personalising Learning for Different Students',time:'6 min',free:false,content:`<h3>Differentiated Instruction with AI</h3><p>Every class has students at different levels. AI helps you create multiple versions of the same content — simplified for struggling students, extended for advanced learners.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Take one paragraph from your textbook.<div class="prompt-wrap"><div class="prompt-block" id="p-t4-1">Rewrite the following paragraph at three reading levels: (1) primary school age, (2) secondary school age, (3) advanced/university level. [paste your paragraph]</div><button class="copy-btn" onclick="copyPrompt('p-t4-1',this)">Copy</button></div>Use the simplified version with your weakest students this week and observe the difference in comprehension.</div>`},
+    {title:'Using AI for Grading & Feedback',time:'5 min',free:false,content:`<h3>Faster Feedback, Better Learning</h3><p>AI can evaluate student essays, suggest grades with justification, and provide personalised feedback comments.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Take one student essay from your last assignment.<div class="prompt-wrap"><div class="prompt-block" id="p-t5-1">Grade this essay out of 20 marks: content (10), language (5), structure (5). Provide specific feedback for each area. Here is the essay: [paste essay]</div><button class="copy-btn" onclick="copyPrompt('p-t5-1',this)">Copy</button></div>Compare the AI grade to yours. Note where AI caught things you missed.</div>`},
+    {title:'Creating Educational Visual Aids with AI',time:'4 min',free:false,content:`<h3>Canva AI and Visual Learning</h3><p>From diagrams to infographics, AI-powered design tools let you create professional educational visuals without any design skills.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Go to Canva.com (free account). Use Magic Design to create a 5-slide presentation for your next topic.<div class="prompt-wrap"><div class="prompt-block" id="p-t6-1">Create a simple and engaging infographic explaining the water cycle for JSS2 students. Include 5 stages with short labels.</div><button class="copy-btn" onclick="copyPrompt('p-t6-1',this)">Copy</button></div>Use this prompt in ChatGPT to get a description, then recreate it in Canva.</div>`},
+    {title:'AI for Parent Communication & Reports',time:'5 min',free:false,content:`<h3>Write Better Reports Faster</h3><p>AI can draft parent letters, student progress reports, and meeting summaries in minutes.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Write 3 bullet points about any student's performance this term. Then try:<div class="prompt-wrap"><div class="prompt-block" id="p-t7-1">Write a formal but warm end-of-term progress report for a parent based on these notes. Keep it under 150 words and professional. Notes: [paste your bullet points]</div><button class="copy-btn" onclick="copyPrompt('p-t7-1',this)">Copy</button></div>Edit the output to match your voice. Notice how much time you saved.</div>`},
+    {title:'Building an AI-Assisted Classroom Routine',time:'6 min',free:false,content:`<h3>Your 30-Day AI Integration Plan</h3><p>This final lesson brings it all together — a practical plan for making AI a natural part of your teaching workflow without overwhelming yourself.</p><div class="demo-box"><strong>🎯 Final Practical:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-t8-1">Create a 4-week plan for a secondary school teacher to gradually start using AI tools in lesson preparation and assessment. Include one specific AI task per week, starting easy.</div><button class="copy-btn" onclick="copyPrompt('p-t8-1',this)">Copy</button></div>Customise the output to your subject and school. Commit to Week 1 starting tomorrow.</div>`}
+  ]},
+  business:{icon:'💼',title:'Business Owners & Entrepreneurs',desc:'Automate operations, write proposals, analyse data, and grow your business with AI.',color:'business',tag:'BUSINESS',freeCount:2,lessons:[
+    {title:'AI for Business: Where to Begin',time:'4 min',free:true,content:`<h3>Why Every Business Owner Needs AI Now</h3><p>A small business owner in Lagos can use the same AI tools as a Fortune 500 company — for free or at minimal cost. The competitive advantage goes to whoever adopts it first.</p><div class="highlight-box">AI doesn't replace your business instincts. It amplifies them. You still make the decisions — AI handles the execution faster.</div><div class="lesson-image">💡</div><h3>Top AI Tools for Business Owners</h3><p><strong>ChatGPT / Claude</strong> — Write proposals, emails, business plans, and marketing copy.</p><p><strong>Gamma.app</strong> — Create business presentations and pitch decks in minutes.</p><p><strong>Canva AI</strong> — Professional marketing materials without a designer.</p><div class="demo-box"><strong>🎯 Demonstration:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-bu1-1">I run a small tailoring business in Lagos. Give me 5 specific ways I can use free AI tools to save time and grow my business this month.</div><button class="copy-btn" onclick="copyPrompt('p-bu1-1',this)">Copy</button></div>Read the ideas. Pick ONE and implement it this week.</div>`},
+    {title:'Writing Business Proposals & Contracts with AI',time:'6 min',free:true,content:`<h3>Professional Documents in Minutes</h3><p>Winning a contract comes down to how professional your proposal looks. AI can help you write compelling, well-structured proposals that close deals — even if writing isn't your strength.</p><div class="lesson-image">📊</div><div class="demo-box"><strong>🎯 Practical Work:</strong> Think of a real service your business offers. Customise and try this prompt:<div class="prompt-wrap"><div class="prompt-block" id="p-bu2-1">Write a professional business proposal for a cleaning company called SparkClean. The client is a hotel in Abuja. We are proposing daily office cleaning for ₦150,000/month. Include: introduction, scope of work, benefits, pricing, and a call to action.</div><button class="copy-btn" onclick="copyPrompt('p-bu2-1',this)">Copy</button></div>Replace the details with your real business. Save the output as your proposal template.</div>`},
+    {title:'AI-Powered Social Media & Content Marketing',time:'5 min',free:false,content:`<h3>Never Run Out of Content Ideas</h3><p>AI can generate weeks of social media posts, captions, and marketing copy consistent with your brand voice.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-bu3-1">I run a Nigerian food business called Mama Chidi's Kitchen. Create a 7-day Instagram content calendar with captions, emojis, and hashtags. Our signature dish is egusi soup.</div><button class="copy-btn" onclick="copyPrompt('p-bu3-1',this)">Copy</button></div>Schedule the content using free tools like Buffer or Meta Business Suite. Track engagement at end of week.</div>`},
+    {title:'Using AI to Analyse Your Business Data',time:'6 min',free:false,content:`<h3>From Spreadsheet to Insights</h3><p>Copy your sales data into ChatGPT or Claude and ask specific business questions.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Take your last 3 months of sales records.<div class="prompt-wrap"><div class="prompt-block" id="p-bu4-1">Here are my monthly sales figures: [paste your data]. Identify my best-selling period, weakest month, and suggest one pricing or marketing action I should take.</div><button class="copy-btn" onclick="copyPrompt('p-bu4-1',this)">Copy</button></div>Act on one suggestion from the AI output this week.</div>`},
+    {title:'Customer Service Automation with AI',time:'5 min',free:false,content:`<h3>A 24/7 Customer Service Rep for Free</h3><p>AI chatbots for WhatsApp Business can answer customer questions and handle complaints — even while you sleep.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> List your 10 most common customer questions, then try:<div class="prompt-wrap"><div class="prompt-block" id="p-bu5-1">Write friendly, professional replies to these 10 customer questions for a [your business type] in Nigeria. Make each reply under 50 words. [paste your 10 questions]</div><button class="copy-btn" onclick="copyPrompt('p-bu5-1',this)">Copy</button></div>Use these as WhatsApp Business quick reply templates.</div>`},
+    {title:'AI for Financial Planning & Budgeting',time:'5 min',free:false,content:`<h3>Smarter Financial Decisions</h3><p>AI can help you create cash flow projections, categorise expenses, and identify financial patterns from a simple list of figures.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> List your top 10 monthly business expenses.<div class="prompt-wrap"><div class="prompt-block" id="p-bu6-1">Based on these business expenses, suggest 3 areas where a small Nigerian business could reduce costs without reducing quality or output: [paste your expenses]</div><button class="copy-btn" onclick="copyPrompt('p-bu6-1',this)">Copy</button></div>Implement one suggestion this month and measure the impact.</div>`},
+    {title:'Finding & Researching Competitors with AI',time:'4 min',free:false,content:`<h3>Know Your Market Better Than Anyone</h3><p>AI can summarise competitor positioning, analyse market trends, and help you identify gaps in your industry.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-bu7-1">I run a [your business type] in [your city]. Describe what my typical competitor probably does well and where they fall short. Suggest 3 ways I could differentiate my business to win more customers.</div><button class="copy-btn" onclick="copyPrompt('p-bu7-1',this)">Copy</button></div>Use the output to sharpen your business positioning this month.</div>`},
+    {title:'Building a 90-Day AI Business Strategy',time:'6 min',free:false,content:`<h3>Your AI-Powered Business Roadmap</h3><p>A practical 90-day plan to implement AI across your operations — marketing, finance, customer service, and content — one week at a time.</p><div class="demo-box"><strong>🎯 Final Practical:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-bu8-1">Create a 90-day AI implementation plan for a small [your business type] in Nigeria. Include specific tools, weekly tasks, and expected outcomes. Start simple in week 1 and build up progressively.</div><button class="copy-btn" onclick="copyPrompt('p-bu8-1',this)">Copy</button></div>Customise the output and save it as your roadmap. Review it every Sunday.</div>`}
+  ]},
+  health:{icon:'🩺',title:'Health Workers',desc:'Doctors, nurses & health professionals — use AI for research, documentation, and patient care.',color:'health',tag:'HEALTH',freeCount:2,lessons:[
+    {title:'AI in Healthcare: A Practical Overview',time:'5 min',free:true,content:`<h3>How AI is Transforming Healthcare</h3><p>AI is being used in hospitals worldwide to diagnose diseases, analyse medical images, predict patient outcomes, and streamline administrative tasks.</p><div class="highlight-box">AI in healthcare is not about replacing doctors or nurses. It is about giving them superpowers — faster research, better documentation, and decision support that reduces errors.</div><div class="lesson-image">🏥</div><h3>Key Areas AI Helps Health Workers</h3><p><strong>Clinical Documentation</strong> — AI transcribes and summarises patient consultations, reducing paperwork by up to 70%.</p><p><strong>Medical Research</strong> — Summarise journal articles, drug interactions, and treatment protocols in seconds.</p><p><strong>Patient Education</strong> — Generate patient-friendly explanations of diagnoses and treatment plans.</p><div class="demo-box"><strong>🎯 Demonstration:</strong> Try these two prompts and compare the outputs:<div class="prompt-wrap"><div class="prompt-block" id="p-h1-1">Explain type 2 diabetes to a patient with no medical background, in simple language, under 150 words.</div><button class="copy-btn" onclick="copyPrompt('p-h1-1',this)">Copy</button></div><div class="prompt-wrap"><div class="prompt-block" id="p-h1-2">Now rewrite that explanation as a short script a health worker can read aloud to an illiterate patient in under 60 seconds.</div><button class="copy-btn" onclick="copyPrompt('p-h1-2',this)">Copy</button></div>Notice how AI adapts communication for different patient literacy levels.</div>`},
+    {title:'Using AI for Medical Research & Literature Review',time:'6 min',free:true,content:`<h3>Research in Minutes Instead of Hours</h3><p>Keeping up with medical literature is one of the hardest challenges for busy health professionals. AI changes this completely.</p><div class="highlight-box">Paste any medical article into an AI tool and ask: "Summarise this in plain language" — and get a clear answer in seconds.</div><h3>Recommended Tools</h3><p><strong>Consensus.app</strong> — AI-powered search engine for scientific papers with citations.</p><p><strong>Claude / ChatGPT</strong> — Paste journal abstracts and ask specific clinical questions.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Find any medical abstract related to your specialty. Try this prompt:<div class="prompt-wrap"><div class="prompt-block" id="p-h2-1">Summarise the current evidence on metformin use in elderly diabetic patients with mild renal impairment. What do major guidelines recommend?</div><button class="copy-btn" onclick="copyPrompt('p-h2-1',this)">Copy</button></div>Then cross-reference one key point with UpToDate or your hospital formulary. Build the habit: AI-assisted, human-verified.</div>`},
+    {title:'AI for Clinical Documentation & Patient Notes',time:'5 min',free:false,content:`<h3>Faster, Better Patient Documentation</h3><p>AI transcription and summarisation tools can significantly cut documentation time while improving quality and completeness of patient records.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Write 5 rough bullet points about a fictional patient encounter (no real patient data).<div class="prompt-wrap"><div class="prompt-block" id="p-h3-1">Turn these clinical notes into a professional SOAP-format patient note: [paste your 5 bullet points]</div><button class="copy-btn" onclick="copyPrompt('p-h3-1',this)">Copy</button></div>Compare the structure to your standard documentation. Adapt for your ward or clinic setting.</div>`},
+    {title:'Explaining Diagnoses to Patients Using AI',time:'4 min',free:false,content:`<h3>Patient-Friendly Communication</h3><p>AI can translate complex medical explanations into simple language patients understand — improving health literacy and treatment compliance across all literacy levels.</p><div class="demo-box"><strong>🎯 Practical Work:</strong> Choose a common diagnosis you frequently explain to patients.<div class="prompt-wrap"><div class="prompt-block" id="p-h4-1">Explain [diagnosis] to a patient with primary school education. Use simple language, no jargon, and include what to do and what to avoid. Under 120 words.</div><button class="copy-btn" onclick="copyPrompt('p-h4-1',this)">Copy</button></div>Use the output with your next patient and observe comprehension improvement.</div>`},
+    {title:'Drug Interaction Checking & Prescription Support',time:'5 min',free:false,content:`<h3>An Extra Layer of Safety</h3><p>AI tools can cross-check drug interactions, flag contraindications, and assist with dosage recall — providing a valuable second check. Always verify with official pharmacological references.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-h5-1">What are the known interactions between metformin, lisinopril, and ibuprofen? What should a clinician monitor and what should be avoided?</div><button class="copy-btn" onclick="copyPrompt('p-h5-1',this)">Copy</button></div>Cross-reference one key point with UpToDate or your hospital formulary. Never use AI as the final authority in clinical decisions.</div>`},
+    {title:'AI for Mental Health Professionals',time:'5 min',free:false,content:`<h3>Supporting Mental Health Practice with AI</h3><p>From therapy note templates to psychoeducation materials, AI has specific applications for mental health practitioners.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-h6-1">Write a psychoeducation handout for a patient newly diagnosed with generalised anxiety disorder. Include what it is, common triggers, 3 coping strategies, and when to seek help. Keep it empathetic and under 300 words.</div><button class="copy-btn" onclick="copyPrompt('p-h6-1',this)">Copy</button></div>Review and personalise the output for your clinical context before using it.</div>`},
+    {title:'Administrative AI: Scheduling, Billing & Reports',time:'4 min',free:false,content:`<h3>Reclaim Your Administrative Time</h3><p>AI can draft discharge summaries, write insurance pre-authorisation letters, generate appointment reminder messages, and produce monthly clinical reports.</p><div class="demo-box"><strong>🎯 Practical Work:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-h7-1">Write a discharge summary template for a patient admitted for uncomplicated malaria. Include: admitting diagnosis, treatment given, discharge condition, medications prescribed, and follow-up instructions.</div><button class="copy-btn" onclick="copyPrompt('p-h7-1',this)">Copy</button></div>Adapt the template for your ward or facility.</div>`},
+    {title:'Building an AI-Integrated Clinical Workflow',time:'6 min',free:false,content:`<h3>Your Practical AI Integration Plan</h3><p>A step-by-step guide to safely and ethically integrating AI tools into your clinical practice — starting with admin, moving to research, then patient communication.</p><div class="demo-box"><strong>🎯 Final Practical:</strong><div class="prompt-wrap"><div class="prompt-block" id="p-h8-1">Design a 4-week plan for a doctor/nurse in a Nigerian hospital to start using AI tools. Start with administrative tasks in week 1 and progress to clinical support by week 4. Specify which tools to use each week and what safety guidelines to follow.</div><button class="copy-btn" onclick="copyPrompt('p-h8-1',this)">Copy</button></div>Customise the output, share with one colleague, and begin Week 1 tomorrow.</div>`}
+  ]}
+};
+
+// ─────────────────────────────────────────────
+// DEVICE ID — 8 alphanumeric digits in format XXXX-XXXX
+// ─────────────────────────────────────────────
+function getDeviceId(){
+  let id=localStorage.getItem('lap_device_id');
+  if(!id){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let r='';
+    for(let i=0;i<8;i++){
+      if(i===4)r+='-';
+      r+=chars[Math.floor(Math.random()*chars.length)];
+    }
+    id=r;
+    localStorage.setItem('lap_device_id',id);
+  }
+  return id;
+}
+
+// ─────────────────────────────────────────────
+// KEY LOGIC
+// Pattern: LAP-XXXX-XXXX-LAXXX
+// The XXXX-XXXX section MUST match the device ID exactly.
+// The XXX after LA is any 3 alphanumeric characters (admin-chosen suffix).
+// ─────────────────────────────────────────────
+function validateKey(key,deviceId){
+  // Normalise
+  const k=key.trim().toUpperCase();
+  // Must match: LAP-XXXX-XXXX-LAXXX  (total 19 chars with dashes)
+  const re=/^LAP-([A-Z0-9]{4}-[A-Z0-9]{4})-LA[A-Z0-9]{3}$/;
+  if(!re.test(k)) return false;
+  // Extract the device portion (chars 4-11 = XXXX-XXXX)
+  const keyDevice=k.substring(4,13); // "XXXX-XXXX"
+  return keyDevice===deviceId.toUpperCase();
+}
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let isPremium=false,currentPath=null,currentLessonIndex=0,completed={};
+
+function loadState(){isPremium=localStorage.getItem('lap_premium')==='true';completed=JSON.parse(localStorage.getItem('lap_completed')||'{}')}
+function saveState(){localStorage.setItem('lap_premium',isPremium);localStorage.setItem('lap_completed',JSON.stringify(completed))}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function updateBadge(id){const el=document.getElementById(id);if(!el)return;el.textContent=isPremium?'PREMIUM':'FREE';el.className=isPremium?'premium-badge':'free-badge'}
+
+function buildWaLink(extraMsg){
+  const deviceId=getDeviceId();
+  const msg=encodeURIComponent(`Hello! I have made payment for LearnAI Pro Premium.\n\nMy Device ID: ${deviceId}\n\n${extraMsg||'Please send my activation key.'}`);
+  return`https://wa.me/2347088920908?text=${msg}`;
+}
+
+function goHome(){
+  updateBadge('home-badge');updateProgressBars();
+  document.getElementById('upgrade-banner').style.display=isPremium?'none':'flex';
+  document.getElementById('tutor-home-banner').style.display=isPremium?'block':'none';
+  if(isPremium){document.getElementById('tutor-wa-link').href=buildWaLink('I need help from the AI Tutor.')}
+  showScreen('home');
+}
+
+function showUpgrade(){
+  // Update tutor button state based on premium status
+  document.getElementById('upgrade-tutor-locked').style.display=isPremium?'none':'flex';
+  const tutorBtn=document.getElementById('upgrade-tutor-btn');
+  if(isPremium){
+    tutorBtn.href=buildWaLink('I need help from the AI Tutor.');
+    tutorBtn.style.display='flex';
+  } else {
+    tutorBtn.style.display='none';
+  }
+  showScreen('upgrade');
+}
+
+function showActivate(){
+  updateBadge('activate-badge');
+  const deviceId=getDeviceId();
+  document.getElementById('device-id-display').textContent=deviceId;
+  document.getElementById('wa-prefill-link').href=buildWaLink('');
+  showScreen('activate');
+}
+
+function openPath(pathKey){
+  currentPath=pathKey;const path=PATHS[pathKey];
+  updateBadge('detail-badge');
+  document.getElementById('path-hero-icon').textContent=path.icon;
+  document.getElementById('path-hero-title').textContent=path.title;
+  document.getElementById('path-hero-desc').textContent=path.desc;
+  renderLessons(pathKey);showScreen('path-detail');
+}
+
+function isLocked(lesson,index,pathKey){
+  const path=PATHS[pathKey];
+  if(lesson.locked) return !isPremium;
+  return index>=(path.freeCount||2)&&!isPremium;
+}
+
+function renderLessons(pathKey){
+  const path=PATHS[pathKey];const list=document.getElementById('lessons-list');list.innerHTML='';
+  path.lessons.forEach((lesson,i)=>{
+    const done=completed[`${pathKey}-${i}`];const locked=isLocked(lesson,i,pathKey);
+    const card=document.createElement('div');
+    card.className=`lesson-card ${locked?'locked':''} ${done?'completed':''}`;
+    const numClass=locked?'locked-num':done?'done':'free-num';
+    const numContent=locked?'🔒':done?'✓':`${i+1}`;
+    const lockLabel=lesson.locked&&!isPremium?'· 🔒 Premium (Locked)':locked?'· 🔒 Premium':done?'· ✅ Completed':'· Free';
+    card.innerHTML=`<div class="lesson-num ${numClass}">${numContent}</div><div class="lesson-info"><div class="lesson-title">${lesson.title}</div><div class="lesson-meta">${lesson.time} ${lockLabel}</div></div><span style="color:var(--muted);font-size:18px">›</span>`;
+    card.onclick=locked?(()=>showUpgrade()):(()=>openLesson(pathKey,i));
+    list.appendChild(card);
+  });
+  if(!isPremium){
+    const gate=document.createElement('div');gate.className='lock-gate';
+    const lockedCount=path.lessons.filter((l,i)=>isLocked(l,i,pathKey)).length;
+    gate.innerHTML=`<h3>🔒 ${lockedCount} Modules Locked</h3><p>Upgrade to Premium for lifetime access to all lessons — one payment, forever.</p><button class="btn-primary" onclick="showUpgrade()">Unlock All — ₦3,500</button>`;
+    list.appendChild(gate);
+  }
+}
+
+function openLesson(pathKey,index){
+  currentPath=pathKey;currentLessonIndex=index;
+  const path=PATHS[pathKey];const lesson=path.lessons[index];
+  updateBadge('lesson-badge');
+  const tagEl=document.getElementById('lesson-tag-label');
+  tagEl.textContent=path.tag;tagEl.className=`lesson-tag ${pathKey}`;
+  document.getElementById('lesson-title-display').textContent=lesson.title;
+  document.getElementById('lesson-read-time').textContent=lesson.time;
+  document.getElementById('lesson-body-content').innerHTML=lesson.content;
+  document.getElementById('lesson-back-bar').onclick=()=>openPath(pathKey);
+  const prev=document.getElementById('btn-prev');const next=document.getElementById('btn-next');
+  if(index===0){prev.style.display='none';next.style.flex='1'}else{prev.style.display='block';prev.style.flex='1'}
+  const isLast=index===path.lessons.length-1;
+  next.textContent=isLast?'✅ Complete Path':'Next →';
+  next.className=isLast?'btn-lesson-nav complete':'btn-lesson-nav next';
+  showScreen('lesson-reader');
+}
+
+function prevLesson(){if(currentLessonIndex>0)openLesson(currentPath,currentLessonIndex-1)}
+function nextLessonOrComplete(){
+  const path=PATHS[currentPath];
+  completed[`${currentPath}-${currentLessonIndex}`]=true;saveState();
+  if(currentLessonIndex<path.lessons.length-1){
+    const ni=currentLessonIndex+1;const nl=path.lessons[ni];
+    if(isLocked(nl,ni,currentPath))showUpgrade();else openLesson(currentPath,ni);
+  }else{updateProgressBars();openPath(currentPath)}
+}
+
+function updateProgressBars(){
+  ['teacher','business','health','basics'].forEach(key=>{
+    const lessons=PATHS[key].lessons;const done=lessons.filter((_,i)=>completed[`${key}-${i}`]).length;
+    const pct=Math.round((done/lessons.length)*100);
+    const el=document.getElementById(`${key}-prog`);const label=document.getElementById(`${key}-prog-label`);
+    if(el)el.style.width=pct+'%';
+    if(label)label.textContent=pct>0?`${done}/${lessons.length} complete`:'0% complete';
+  });
+}
+
+// ─────────────────────────────────────────────
+// ACTIVATION — key format: LAP-XXXX-XXXX-LAXXX
+// Placeholder shown: XXX-XXXX-XXXX-XXXXX (no hint)
+// ─────────────────────────────────────────────
+function handleKeyInput(input){
+  // Allow user to type freely; just uppercase and strip disallowed chars
+  let val=input.value.toUpperCase().replace(/[^A-Z0-9\-]/g,'');
+  // Enforce max length of 19
+  if(val.length>19)val=val.substring(0,19);
+  input.value=val;
+}
+
+function activateKey(){
+  const input=document.getElementById('key-input').value.trim();
+  const deviceId=getDeviceId();
+  const error=document.getElementById('key-error');const success=document.getElementById('key-success');const btn=document.getElementById('activate-btn');
+  error.style.display='none';success.style.display='none';
+  if(!input){error.textContent='⚠️ Please enter your activation key.';error.style.display='block';return}
+  if(validateKey(input,deviceId)){
+    isPremium=true;saveState();success.style.display='block';
+    btn.textContent='✅ Premium Activated!';btn.style.background='linear-gradient(135deg,#0a8a5a,#065f40)';
+    updateBadge('activate-badge');setTimeout(()=>goHome(),2000);
+  }else{error.textContent='❌ Invalid key. Please check the key you received and try again.';error.style.display='block'}
+}
+
+// ─────────────────────────────────────────────
+// COPY HELPERS
+// ─────────────────────────────────────────────
+function copyPrompt(id,btn){
+  const text=document.getElementById(id)?.innerText||document.getElementById(id)?.textContent;
+  if(!text)return;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);
+  }).catch(()=>{
+    // Fallback for older browsers
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);
+  });
+}
+
+function copyDeviceId(){
+  const id=getDeviceId();
+  navigator.clipboard.writeText(id).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=id;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+  const btn=document.querySelector('.copy-id-btn');btn.textContent='✅ Copied!';
+  setTimeout(()=>{btn.textContent='📋 Copy'},2000);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+loadState();
+const _devId=getDeviceId();
+document.getElementById('device-id-display').textContent=_devId;
+document.getElementById('wa-prefill-link').href=buildWaLink('');
+updateProgressBars();
+if(isPremium){
+  document.getElementById('upgrade-banner').style.display='none';
+  document.getElementById('tutor-home-banner').style.display='block';
+  document.getElementById('tutor-wa-link').href=buildWaLink('I need help from the AI Tutor.');
+}
+</script>
+</body>
+</html>
